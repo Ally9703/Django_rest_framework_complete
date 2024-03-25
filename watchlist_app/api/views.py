@@ -4,7 +4,7 @@ from rest_framework.views import APIView
 from  watchlist_app.models import WatchList, StreamPlatform
 from watchlist_app.api.serializers import WatchListSerializer, StreamPlatformSerializer
 
-class StreamPlatformAv(APIView):
+class StreamPlatformAV(APIView):
     def get(self, request):
         platforms = StreamPlatform.objects.all()
         serializer = StreamPlatformSerializer(platforms, many=True)
@@ -33,7 +33,7 @@ class WatchListAV(APIView):
             return Response(serializer.errors, status=400)
     
     
-class WatchDetailAV(APIView):
+class StreamPlatformDetailAV(APIView):
     
     def get(self, request, pk):
         try:

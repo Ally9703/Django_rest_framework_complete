@@ -7,7 +7,7 @@ from watchlist_app.api.serializers import WatchListSerializer, StreamPlatformSer
 class StreamPlatformAV(APIView):
     def get(self, request):
         platforms = StreamPlatform.objects.all()
-        serializer = StreamPlatformSerializer(platforms, many=True)
+        serializer = StreamPlatformSerializer(platforms, many=True, context={'request': request})
         return Response(serializer.data)
     
     def post(self, request):
@@ -37,15 +37,15 @@ class StreamPlatformDetailAV(APIView):
     
     def get(self, request, pk):
         try:
-            movie = WatchList.objects.get(pk=pk)
-        except WatchList.DoesNotExist:
+            platform = StreamPlatform.objects.get(pk=pk)
+        except StreamPlatform.DoesNotExist:
             return Response({'error':'Movie not fount'}, status=status.HTTP_404_NOT_FOUND)
-        serializer = WatchListSerializer(movie)
+        serializer = StreamPlatformSerializer(platform, context={'request': request})
         return Response(serializer.data)
     
     def put(self, request, pk):
-        movie = WatchList.objects.get(pk=pk)
-        serializer = WatchListSerializer(movie, data=request.data)
+        platform = StreamPlatform.objects.get(pk=pk)
+        serializer = StreamPlatformSerializer(platform, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
@@ -53,6 +53,6 @@ class StreamPlatformDetailAV(APIView):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
     def delete(self,request, pk):
-        movie = WatchList.objects.get(pk=pk)
-        movie.delete()
+        platform = StreamPlatform.objects.get(pk=pk)
+        platform.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)

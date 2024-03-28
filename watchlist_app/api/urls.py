@@ -1,14 +1,21 @@
-from django.urls import path
-from watchlist_app.api.views import (ReviewList,ReviewDetail, WatchListAV,  
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
+from watchlist_app.api.views import (ReviewList,ReviewDetail, ReviewCreate, WatchListAV,  
                                      StreamPlatformAV, StreamPlatformDetailAV, 
-                                     ReviewCreate, ReviewDetail)
+                                     StreamPlatformVS)
+
+router = DefaultRouter()
+router.register('stream', StreamPlatformVS, basename='streamplatform')
 
 urlpatterns = [
     
-    path('list/', WatchListAV.as_view(), name='movie_list'),
-    # path('<int:pk>/', WatchDetailAV.as_view(), name='movie-detail'),
-    path('stream/', StreamPlatformAV.as_view(), name='stream_platform'),
-    path('stream/<int:pk>', StreamPlatformDetailAV.as_view(), name='streamplatform-detail'),
+    path('list/', WatchListAV.as_view(), name='movie-list'),
+    #path('<int:pk>/', StreamPlatformDetailAV.as_view(), name='movie-detail'),
+    
+    path('', include(router.urls)),
+    
+    #path('stream/', StreamPlatformAV.as_view(), name='stream_platform'),
+    #path('stream/<int:pk>', StreamPlatformDetailAV.as_view(), name='streamplatform-detail'),
     
     
     #path('review/', ReviewList.as_view(), name='review-list'),
